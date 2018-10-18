@@ -5,6 +5,7 @@ Establishing identity of long tail entities and events from text
 The project consists of two main folders: 
 
 `EntityIdentity`, containing the experiments for establishing identity of long-tail entities, and 
+
 `EventIdentity`, containing the experiments for establishing identity of long-tail events.
 
 The structure within each of these two folders is identical, and consists of the following folders:
