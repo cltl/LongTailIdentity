@@ -58,3 +58,12 @@ def load_conll_data(file_location):
                 else:
                     list_of_lines.append(line)
     return conll_data
+
+def transform_gold_to_json(data):
+    a_json = {}
+    cluster_id=1
+    for pid, separate_ids in data.items():
+        for spid in separate_ids:
+            a_json[spid]=cluster_id
+        cluster_id+=1
+    return a_json
