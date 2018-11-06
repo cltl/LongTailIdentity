@@ -1,4 +1,5 @@
-**/*.ipynb_checkpoints/
+Folder/.ipynb_checkpoints/
+
 .DS_Store
 EntityIdentity/data_preparation/.ipynb_checkpoints/
 EntityIdentity/data_preparation/__pycache__
