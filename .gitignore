@@ -1,4 +1,8 @@
 EntityIdentity/data_preparation/.ipynb_checkpoints/
 .DS_Store
+EntityIdentity/data
 EntityIdentity/data_preparation/.ipynb_checkpoints/
 EntityIdentity/data_preparation/__pycache__
+EntityIdentity/data_preparation/auxiliary_data/
+gvdb-aggregated-db/
+other_options/
