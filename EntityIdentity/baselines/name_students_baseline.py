@@ -28,9 +28,10 @@ if __name__ == "__main__":
 	output_dir='../data/system/name_students_baseline/%s' % which_partition
 
 	# Define which properties to consider
-	properties=['Name']
-	properties+=['CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction', 'BirthPlace'] # 
-	properties+=['Gender', 'AgeGroup', 'DeathDate', 'DeathDate']
+#	properties=['Name']
+#	properties=['CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction', 'BirthPlace'] # 
+#	properties=['Gender', 'AgeGroup', 'DeathDate']
+	properties=['Age']
 
 	for input_file in glob.glob('%s/*' % input_dir):
 		with open(input_file, 'rb') as f:
@@ -44,7 +45,6 @@ if __name__ == "__main__":
 							tuple_key.append(participant[p])
 						else:
 							tuple_key.append('')
-					
 					group_by_name_plus[tuple(tuple_key)].add(part)
 			system_json=transform_to_json(group_by_name_plus)
 		output_file='%s/%s.json' % (output_dir, (input_file.split('/')[-1]).split('.')[0])

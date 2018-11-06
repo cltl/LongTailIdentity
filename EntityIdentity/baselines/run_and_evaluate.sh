@@ -1,3 +1,3 @@
-python3 name_students_baseline.py -p partial
+python3 name_students_baseline.py -p full
 cd ../data_preparation
-python3 evaluate.py -p partial -s name_students_baseline
+python3 evaluate.py -p full -s name_students_baseline
