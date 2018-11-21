@@ -46,6 +46,44 @@ def get_coref_spans(names, text, doc):
                         spans[person_name].append(oc)
     return people_spans, spans, clusters
 
+################### SEMEVAL DATA PREPARATION ##########################
+
+def conll_to_text(rows):
+    """Extract document text from its conll representation."""
+    tokens=[]
+    for row in rows:
+        elements=row.split('\t')
+#        print(elements, elements[1])
+        if elements[1]=='NEWLINE':
+            elements[1]='\n'
+        tokens.append(elements[1])
+    text=' '.join(tokens)
+    return text
+
+def get_names(part_data):
+    """Return the names of people given their annotation JSON."""
+    names=[]
+    for part_id, part_info in part_data.items():
+        if 'Name' in part_info.keys() and part_info['Name'].strip():
+            names.append(part_info['Name'].strip())
+    return names
+
+def transform_part_info(data):
+    """Transform the participants annotation JSON, into one that has names as keys."""
+    new_data={}
+    for part_id, part in data.items():
+        if 'Name' in part and part['Name'].strip():
+            name=part['Name'].strip()
+            del part['Name']
+            new_part={}
+            for k,v in part.items():
+                k=k.strip().lower()
+                new_part[k]=v.strip().lower()
+                if k=='ethnicity':
+                    print(new_part[k], part_id)
+            new_data[name]=new_part
+    return new_data
+
 ################### OTHER HELPER FUNCTIONS ############################
 
 def get_sentence(span, sentence_offsets):
@@ -125,3 +163,58 @@ def get_participant_info(data, sections=['shooter-section', 'victim-section']):
                     info['race']=re.sub(r'\W+', '', info['race'])
                 part_info[name]=info
     return part_info
+
+def benchmark_extractors(system, gold, attributes, debug=None):
+    """Perform evaluation of system output."""
+    assert len(system)==len(gold)
+    tp=defaultdict(int)
+    fp=defaultdict(int)
+    fn=defaultdict(int)
+    
+    
+    for index, gold_row in enumerate(gold):
+        system_row=system[index]
+        
+        for part, gold_vals in gold_row.items():
+            try:
+                system_vals=system_row[part]
+            except KeyError:
+                system_vals={}
+            
+            for a in attributes:
+                gold_val=''
+                system_val=''
+                if a in gold_vals:
+                    gold_val=gold_vals[a].strip()
+                if a in system_vals:
+                    system_val=system_vals[a].strip()
+                if gold_val and system_val:
+                    if a==debug:
+                        print(index, 'gold', gold_val, 'sys', system_val)
+                    if gold_val==system_val:
+                        tp[a]+=1
+                    else:
+                        fp[a]+=1
+                        fn[a]+=1
+                elif gold_val:
+                    fn[a]+=1
+                    if a==debug:
+                        print(index, 'gold', gold_val)
+                elif system_val:
+                    fp[a]+=1
+                    if a==debug:
+                        print(index, 'sys', system_val)
+
+    recall={}
+    prec={}
+    f1={}
+    
+    print(tp,fp, fn)
+    for a in attributes:
+        prec[a]=tp[a]/(tp[a]+fp[a])
+        recall[a]=tp[a]/(tp[a]+fn[a])
+        if prec[a]+recall[a]:
+            f1[a]=2*prec[a]*recall[a]/(prec[a]+recall[a])
+        else:
+            f1[a]=0.0
+    return prec, recall, f1
