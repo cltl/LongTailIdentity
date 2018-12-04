@@ -41,7 +41,10 @@ if __name__ == "__main__":
 		sys_list=[]
 		gold_list=[]
 		for spid in all_separate_participants:
-			sys_list.append(system_json[spid])
+			try:
+			    sys_list.append(system_json[spid])
+			except KeyError:
+                            sys_list.append(-1)
 			gold_list.append(gold_json[spid])
 
 		score=adjusted_rand_score(gold_list, sys_list)
