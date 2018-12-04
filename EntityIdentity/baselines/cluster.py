@@ -72,30 +72,46 @@ def count_values(data):
 		s+=len(v)
 	return s
 
+
+############## MAIN FUNCTION #################
+
+
 if __name__ == "__main__":
 	# Parse arguments
 	parser = argparse.ArgumentParser(description='Simple baseline based on people\'s full names.')
 	parser.add_argument('-p', '--partition', required=True, type=str,
-				help='On which data partition to run it: full or partial')
+		help='On which data partition to run it: full or partial')
+    
+	parser.add_argument('-e', '--extractor', required=True, type=str,
+                help='Which extractor to use: gold or auto')
+	parser.add_argument('-m', '--merger', required=True, type=str,
+                help='Which merger to use: exact or noclash')
+    
 	args = vars(parser.parse_args())
 	which_partition=args['partition']
-
-	test_file='test.p'
+	which_extractor=args['extractor']
+	merger=args['merger']
 
 	# set directories
-	input_dir='../data/input/%s/annotation' % which_partition
-	output_dir='../data/system/name_students_baseline/%s' % which_partition
-
+	if which_extractor=='gold':
+            input_dir='../data/input/%s/annotation' % which_partition
+            output_dir='../data/system/name_students_baseline/%s' % which_partition
+	else:
+            input_dir='extracted_data/%s' % which_partition
+            output_dir='../data/system/auto_ext_baseline/%s' % which_partition
+        
 	# Define which properties to consider
-	properties=['Name']
+#	properties=['Name']
+	properties=[]
 #	properties+=['CauseOfDeath', 'EducationLevel', 'Residence']
 #	properties+=['Residence', 'Religion', 'Ethnicity']
-#	properties+=['CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction' , 'BirthPlace'] # 
-	properties+=['Gender', 'Age', 'DeathDate'] #, 'DeathPlace']
+	properties+=['CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction' , 'BirthPlace'] # 
+	properties+=['Gender', 'Age', 'DeathDate', 'DeathPlace']
 #	properties+=['Age', 'Gender']
 #	properties+=['Age']
 
 	for input_file in glob.glob('%s/*' % input_dir):
+		print(input_file)
 		with open(input_file, 'rb') as f:
 			group_by_name_plus=defaultdict(set)
 			input_data=pickle.load(f)
@@ -108,8 +124,13 @@ if __name__ == "__main__":
 						else:
 							tuple_key.append('')
 					group_by_name_plus[tuple(tuple_key)].add(part)
-		new_data=perform_merging(group_by_name_plus)
-		system_json=transform_to_json(new_data)
+		if merger=='exact':
+			system_json=transform_to_json(group_by_name_plus)
+		else: # 'noclash'
+			new_data=perform_merging(group_by_name_plus)
+			system_json=transform_to_json(new_data)
+                    
 		output_file='%s/%s.json' % (output_dir, (input_file.split('/')[-1]).split('.')[0])
+		print(output_file)
 		with open(output_file, 'w') as w:
 			json.dump(system_json, w)

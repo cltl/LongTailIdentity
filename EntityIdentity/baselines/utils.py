@@ -1,10 +1,13 @@
 import re
 from collections import defaultdict
-
+import json
+from nltk.corpus import stopwords
+import pickle
 
 ########## FUNCTIONS RELATED TO COREFERENCE PROCESSING #########################
 
 def get_sentence_offsets(doc):
+    """Get a list of (start, end) offsets of the sentence documents."""
     sent_offsets=[]
     for s in doc.sents:
         sent_offsets.append(tuple([s.start_char, s.end_char]))
@@ -60,6 +63,14 @@ def conll_to_text(rows):
     text=' '.join(tokens)
     return text
 
+def load_text_from_json(filename):
+    """Load text from a structured JSON file with three fields: DCT, title, and content."""
+    data=load_json(filename)
+    
+    all_text = '%s\n%s\n%s' % (data['dct'], data['title'], data['content'])
+    
+    return all_text
+
 def get_names(part_data):
     """Return the names of people given their annotation JSON."""
     names=[]
@@ -84,7 +95,48 @@ def transform_part_info(data):
             new_data[name]=new_part
     return new_data
 
+def map_age_to_group(sys_data):
+    for doc in sys_data:
+        for part, data in doc.items():
+            if 'age' in data:
+                age=int(data['age'])
+                age_group=None
+                if age<12:
+                    age_group='child 0-11'
+                elif age<18:
+                    age_group='teen 12-17'
+                elif age<65:
+                    age_group='adult 18-64'
+                else:
+                    age_group='senior 65+'
+                data['age']=age_group
+    return sys_data
+
 ################### OTHER HELPER FUNCTIONS ############################
+
+def remove_stopwords(a_dict):
+    """Remove the keys in a dictionary which are stopwords."""
+    new_dict={}
+    en_stopwords=set(stopwords.words('english'))
+    for k, v in a_dict.items():
+        if k not in en_stopwords:
+            new_dict[k]=v
+    return new_dict
+
+def load_json(file):
+    with open (file, 'r') as f:
+        resources=json.load(f)
+    return resources
+
+def load_pickle(file):
+    with open(file, 'rb') as tf:
+        resources=pickle.load(tf)
+    return resources
+
+def dump_pickle(data, filename):
+    with open(filename, 'wb') as wp:
+        pickle.dump(data, wp)
+    return
 
 def get_sentence(span, sentence_offsets):
     for i, offset in enumerate(sentence_offsets):
@@ -131,6 +183,14 @@ def lookup_person_in_list(name, ments):
         if name in m:
             return True
     return False
+
+def count_per_attribute(rows):
+    count_per_attr=defaultdict(int)
+    for row in rows:
+        for part, data in row.items():
+            for attr in data.keys():
+                count_per_attr[attr]+=1
+    return count_per_attr
 
 ############## FUNCTIONS RELATED TO EVALUATION #######################################
 
