@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
 	# Combine into directories
 	gold_file = '../data/gold/%s/participants.json' % which_partition
-	system_dir = '../data/system/%s/%s' % (system_name, which_partition)
+	system_dir = '../data/system/%s' % system_name
 
 	with open(gold_file, 'r') as g:
 		gold_json = json.load(g)
@@ -49,5 +49,5 @@ if __name__ == "__main__":
 
 		score=adjusted_rand_score(gold_list, sys_list)
 
-		print(system_file, score)
+		print('%s\t%.3f' % (system_file, score))
 

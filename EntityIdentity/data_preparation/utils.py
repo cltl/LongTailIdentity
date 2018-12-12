@@ -67,3 +67,26 @@ def transform_gold_to_json(data):
             a_json[spid]=cluster_id
         cluster_id+=1
     return a_json
+
+def create_ambiguous_data(input_file, output_file, new_name='', new_firstname='', new_lastname=''):
+    with open(input_file, 'rb') as f:
+        gva_input_annotations=pickle.load(f)
+    for doc_id, data in gva_input_annotations.items():
+        for participant_id, participant_info in data.items():
+            if 'Name' in participant_info and participant_info['Name'].strip():
+                old_name=participant_info['Name'].strip()
+                if new_name:
+                    participant_info['Name']=new_name
+                elif new_firstname:
+                    first_name, *other_names = old_name.split()
+                    participant_info['Name']=' '.join([new_firstname] + other_names)
+                elif new_lastname:
+                    *other_names, last_name = old_name.split()
+                    participant_info['Name']=' '.join(other_names + [new_lastname])
+                else:
+                    return
+
+    with open(output_file, 'wb') as w:
+        pickle.dump(gva_input_annotations, w)
+        
+    return
