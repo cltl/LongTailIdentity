@@ -1,6 +1,6 @@
 data=( 'full' 'partial' )
-#extraction='auto'
-extraction='gold'
+extraction='auto'
+#extraction='gold'
 combine=( 'exact' 'noclash' )
 props=( 'p0' 'p1' 'p2' 'p3' 'p4' 'p5' 'p6' 'p7' 'p8' 'p9' 'p10' 'p11' 'p12' 'p13' )
 

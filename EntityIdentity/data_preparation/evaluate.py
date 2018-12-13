@@ -40,14 +40,18 @@ if __name__ == "__main__":
 		# From JSON to lists that can be used to evaluate on
 		sys_list=[]
 		gold_list=[]
+		cnt_minusone=0
 		for spid in all_separate_participants:
 			try:
 			    sys_list.append(system_json[spid])
 			except KeyError:
-                            sys_list.append(-1)
+			    sys_list.append(-1)
+			    cnt_minusone+=1
 			gold_list.append(gold_json[spid])
 
+		#print(sys_list, gold_list)
 		score=adjusted_rand_score(gold_list, sys_list)
 
+		print('minus ones', cnt_minusone, len(sys_list), len(gold_list))
 		print('%s\t%.3f' % (system_file, score))
 
