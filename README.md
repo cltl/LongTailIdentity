@@ -1,14 +1,10 @@
 # LongTailIdentity
-Establishing identity of long tail entities and events from text 
+*The role of knowledge in establishing long-tail identity*
 
 ### Project structure
-The project consists of two main folders: 
-
-1. `EntityIdentity`, containing the experiments for establishing identity of long-tail entities, and 
-2. `EventIdentity`, containing the experiments for establishing identity of long-tail events.
-
-The structure within each of these two folders is identical, and consists of the following folders:
+The project consists of these five folders: 
 * `data_preparation` contains scripts that prepare all the evaluation data needed for the experiment.
 * `data` contains the original, input data, as well as the generated task data and the output data by the systems and the baselines.
-* `baselines` contains implementation of several baselines.
-* `src` contains the code of the profiler.
+* `evaluation` contains scripts that evaluate the baselines and our system, by comparing the gold data and system data, both found in the `data` folder.
+* `resources` has several resources that are used by the systems.
+* `systems` contains implementation of several baselines, as well as of the clustering on top of our profiler run.
