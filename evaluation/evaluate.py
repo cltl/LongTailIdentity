@@ -44,6 +44,7 @@ if __name__ == "__main__":
 			try:
 			    sys_list.append(system_json[spid])
 			except KeyError:
+			    print(spid)
 			    sys_list.append(-1)
 			    cnt_minusone+=1
 			gold_list.append(gold_json[spid])
