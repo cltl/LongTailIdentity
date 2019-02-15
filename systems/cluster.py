@@ -46,8 +46,8 @@ if __name__ == "__main__":
 #                       'p10': ['Name', 'AgeGroup', 'Gender', 'DeathDate'],
 #                       'p11': ['Name', 'AgeGroup', 'Gender', 'DeathPlace'],
 #                       'p12': ['Name', 'AgeGroup', 'Gender', 'DeathDate', 'DeathPlace'],
-                       'p10': ['Name', 'CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction', 'BirthPlace', 'Age', 'AgeGroup', 'Gender', 'DeathDate', 'DeathPlace'],
-                       'p11': ['Name', 'CauseOfDeath', 'Religion', 'Ethnicity', 'Age', 'Gender']
+                       'all': ['Name', 'CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction', 'BirthPlace', 'Age', 'Gender', 'DeathDate', 'DeathPlace'],
+                       'p10': ['Name', 'CauseOfDeath', 'Religion', 'Ethnicity', 'Age', 'Gender']
                       }
 	properties=prop_combos[which_combination]
 
