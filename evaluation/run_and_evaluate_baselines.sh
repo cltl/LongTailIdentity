@@ -1,11 +1,12 @@
 #!/bin/bash
 
 data=( 'full' 'partial' )
-extraction='auto'
-#extraction='gold'
+#extraction='auto'
+extraction='gold'
 combine=( 'exact' 'noclash' )
-#props=( 'p0' 'p1' 'p2' 'p3' 'p4' 'p5' 'p6' 'p7' 'p8' 'p9' 'p10' )
-props=( 'p11' )
+#props=( 'p0' 'p1' 'p2' 'p3' 'p4' 'p5' 'p6' 'p7' 'p8' 'p9' 'all' )
+props=( 'p10' )
+props=( 'all' )
 
 baseline="name_students_baseline"
 
