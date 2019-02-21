@@ -69,7 +69,7 @@ def print_tables(all_data):
         print(aspect)
         df_input=pd.DataFrame.from_dict(data)
         print(df_input.columns)
-        df_input=df_input[datasets[:4]]
+        df_input=df_input[datasets]
         df_input=df_input.fillna('-')
         print(df_input.to_csv(sep='\t'))
     
