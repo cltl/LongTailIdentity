@@ -34,8 +34,6 @@ if __name__ == "__main__":
 		with open(system_file, 'r') as s:
 			system_json = json.load(s)
 
-
-
 		# From JSON to lists that can be used to evaluate on
 		sys_list=[]
 		gold_list=[]
@@ -44,7 +42,7 @@ if __name__ == "__main__":
 			try:
 			    sys_list.append(system_json[spid])
 			except KeyError:
-			    print(spid)
+			    print(spid, 'not in system json')
 			    sys_list.append(-1)
 			    cnt_minusone+=1
 			gold_list.append(gold_json[spid])
@@ -54,4 +52,3 @@ if __name__ == "__main__":
 
 		print('minus ones', cnt_minusone, len(sys_list), len(gold_list))
 		print('%s\t%.3f' % (system_file, score))
-

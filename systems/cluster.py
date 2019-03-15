@@ -28,6 +28,10 @@ def process_file_with_baseline(input_file, merger, properties, output_file):
     else: # 'noclash'
         keys_per_name = cu.create_keys_per_name(group_by_prop_values)
         new_data=cu.perform_merging(keys_per_name)
+        if DEBUG:
+            basename=(input_file.split('/')[-1]).split('.')[0]
+            log_file_props='../logs/props_%s.json' % basename
+            log_file_clusters='../logs/clusters_%s.json' % basename
     system_json=cu.transform_to_json(new_data)
     
     with open(output_file, 'w') as w:
@@ -40,47 +44,49 @@ def perform_clustering(input_dir, merger, properties, output_dir):
         process_file_with_baseline(input_file, merger, properties, output_file)
 
 if __name__ == "__main__":
-	# Parse arguments
-	parser = argparse.ArgumentParser(description='Run clustering based on extracted properties.')
+    # Parse arguments
+    parser = argparse.ArgumentParser(description='Run clustering based on extracted properties.')
 
-	parser.add_argument('-p', '--partition', required=True, type=str,
-		help='On which data partition to run it: full or partial')
-	parser.add_argument('-e', '--extractor', required=True, type=str,
-                help='Which extractor to use: gold or auto')
-	parser.add_argument('-m', '--merger', required=True, type=str,
-                help='Which merger to use: exact or noclash')
-	parser.add_argument('-c', '--combination', required=True, type=str,
-                help='Which combination of properties: p0 (name only) - p13 (all properties)')
+    parser.add_argument('-p', '--partition', required=True, type=str,
+            help='On which data partition to run it: full or partial')
+    parser.add_argument('-e', '--extractor', required=True, type=str,
+            help='Which extractor to use: gold or auto')
+    parser.add_argument('-m', '--merger', required=True, type=str,
+            help='Which merger to use: exact or noclash')
+    parser.add_argument('-c', '--combination', required=True, type=str,
+            help='Which combination of properties: p0 (name only) - p10 - all properties')
 
-	args = vars(parser.parse_args())
-	which_partition=args['partition']
-	which_extractor=args['extractor']
-	merger=args['merger']
-	which_combination=args['combination']
+    args = vars(parser.parse_args())
+    which_partition=args['partition']
+    which_extractor=args['extractor']
+    merger=args['merger']
+    which_combination=args['combination']
 
-	# set directories
-	if which_extractor=='gold':
-            input_dir='../data/input/%s/annotation' % which_partition
-	else:
-            input_dir='extracted_data/%s' % which_partition
-	output_dir='../data/system/%s/%s/%s/%s' % (which_extractor, which_partition, merger, which_combination)
+    DEBUG=True
 
-	# Define which properties to consider
-	prop_combos = {'p0': ['Name'], 'p1': ['Name', 'CauseOfDeath', 'EducationLevel'], 'p2': ['Name', 'CauseOfDeath', 'EducationLevel', 'Residence'],
-                       'p3': ['Name', 'CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction'],
-                       'p4': ['Name', 'CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction', 'BirthPlace'],
-                       'p5': ['Name', 'Age'],
-                       'p6': ['Name', 'Age', 'Gender'],
-                       'p7': ['Name', 'Age', 'Gender', 'DeathDate'],
-                       'p8': ['Name', 'Age', 'Gender', 'DeathPlace'],
-                       'p9': ['Name', 'Age', 'Gender', 'DeathDate', 'DeathPlace'],
+    # set directories
+    if which_extractor=='gold':
+        input_dir='../data/input/%s/annotation' % which_partition
+    else:
+        input_dir='extracted_data/%s' % which_partition
+    output_dir='../data/system/%s/%s/%s/%s' % (which_extractor, which_partition, merger, which_combination)
+
+    # Define which properties to consider
+    prop_combos = {'p0': ['Name'], 'p1': ['Name', 'CauseOfDeath', 'EducationLevel'], 'p2': ['Name', 'CauseOfDeath', 'EducationLevel', 'Residence'],
+                   'p3': ['Name', 'CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction'],
+                   'p4': ['Name', 'CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction', 'BirthPlace'],
+                   'p5': ['Name', 'Age'],
+                   'p6': ['Name', 'Age', 'Gender'],
+                   'p7': ['Name', 'Age', 'Gender', 'DeathDate'],
+                   'p8': ['Name', 'Age', 'Gender', 'DeathPlace'],
+                   'p9': ['Name', 'Age', 'Gender', 'DeathDate', 'DeathPlace'],
 #                       'p10': ['Name', 'AgeGroup', 'Gender', 'DeathDate'],
 #                       'p11': ['Name', 'AgeGroup', 'Gender', 'DeathPlace'],
 #                       'p12': ['Name', 'AgeGroup', 'Gender', 'DeathDate', 'DeathPlace'],
-                       'all': ['Name', 'CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction', 'BirthPlace', 'Age', 'Gender', 'DeathDate', 'DeathPlace'],
-                       'p10': ['Name', 'CauseOfDeath', 'Religion', 'Ethnicity', 'Age', 'Gender']
-                      }
-	properties=prop_combos[which_combination]
+                   'all': ['Name', 'CauseOfDeath', 'EducationLevel', 'Residence', 'Religion', 'Ethnicity', 'PastConviction', 'BirthPlace', 'Age', 'Gender', 'DeathDate', 'DeathPlace'],
+                   'p10': ['Name', 'CauseOfDeath', 'Religion', 'Ethnicity', 'Age', 'Gender']
+                  }
+    properties=prop_combos[which_combination]
 
-	perform_clustering(input_dir, merger, properties, output_dir)
-    
+    perform_clustering(input_dir, merger, properties, output_dir)
+

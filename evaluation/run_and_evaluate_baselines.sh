@@ -1,12 +1,12 @@
 #!/bin/bash
 
 data=( 'full' 'partial' )
-#extraction='auto'
-extraction='gold'
+extraction='auto'
+#extraction='gold'
 combine=( 'exact' 'noclash' )
 #props=( 'p0' 'p1' 'p2' 'p3' 'p4' 'p5' 'p6' 'p7' 'p8' 'p9' 'all' )
 props=( 'p10' )
-props=( 'all' )
+#props=( 'all' )
 
 baseline="name_students_baseline"
 
@@ -18,7 +18,6 @@ for cmb in "${combine[@]}" ; do
 			echo "\n$extraction $which_data $cmb $which_props"
 			system_dir="${extraction}/${which_data}/${cmb}/${which_props}"
 			mkdir -p "../data/system/${system_dir}"
-
 
 			python3 cluster.py -p $which_data -e $extraction -m $cmb -c $which_props
 			python3 ../evaluation/evaluate.py -p $which_data -s $system_dir
