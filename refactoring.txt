@@ -1,18 +1,9 @@
-0. check no-clash baseline again
-
 1. Notebooks to revise:
 - systems/Attribute Lexica.ipynb
 - systems/Extractors.ipynb
 - systems/Parse profiling and compute similarity.ipynb
 
 - data_preparation/... -> 6 notebooks
-
-2. Moving stuff around:
-- move extracted_data and profiler_output to ~/tmp or data/tmp
-- adapt the change
-- what to do with auxiliary_data and profiler_input
-
-3. Revise evaluation scripts
 
 4. Evaluation data improve
 - participant_input vs extracted_data
@@ -21,3 +12,15 @@
 5. Documentation
 - readme
 - 
+
+********************************************************************
+
+0. [done] check no-clash baseline again
+
+2. [done] Moving stuff around:
+- [done] move extracted_data and profiler_output to ~/tmp or data/tmp
+- [done] adapt the change
+- [done] what to do with auxiliary_data and profiler_input
+
+3. [done] Revise evaluation scripts
+

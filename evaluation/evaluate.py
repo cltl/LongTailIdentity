@@ -50,5 +50,7 @@ if __name__ == "__main__":
 		#print(sys_list, gold_list)
 		score=adjusted_rand_score(gold_list, sys_list)
 
-		print('minus ones', cnt_minusone, len(sys_list), len(gold_list))
-		print('%s\t%.3f' % (system_file, score))
+		print('Not found in the system json:', cnt_minusone, 
+              'Number of system predictions:', len(sys_list), 
+              'Number of gold decisions:', len(gold_list))
+		print('ARI score for file %s\t%.3f' % (system_file, score))

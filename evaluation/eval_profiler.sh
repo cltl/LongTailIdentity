@@ -1,6 +1,8 @@
 extractors=( 'auto' 'gold' ) 
+data=( 'partial' 'full' )
 
 for extractor in "${extractors[@]}" ; do
-	#python evaluate.py -s "${extractor}_profiling/partial" -p partial
-        python evaluate.py -s "${extractor}_profiling/full" -p full
+    for which_data in "${data[@]}" ; do
+        python evaluate.py -s "${extractor}_profiling/${which_data}" -p "${which_data}"
+    done
 done
